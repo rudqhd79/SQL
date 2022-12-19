@@ -733,10 +733,60 @@ ALTER SEQUENCE EMP_SEQ INCREMENT BY 1;  --4씩 증가
 
 TRUNCATE TABLE EMP; --TRUNCATE은 테이블의 데이터를 지워준다
 
+--------------------------------------------------------------------------
 
+CREATE TABLE SAMPLE (
+    NO   NUMBER PRIMARY KEY,
+    NAME VARCHAR2(20),
+    AGE  NUMBER
+);
 
+INSERT INTO SAMPLE VALUES(1, '양지은', 10);
+INSERT INTO SAMPLE VALUES(2, '박우진', 10);
+INSERT INTO SAMPLE VALUES(3, '김태은', 10);
 
+COMMIT; -- 실제 DB에 저장하기 위해선 커밋(INSERT, UPDATE, DELETE 할 때) 을 사용한다
+--SAMPLE 테이블의 DEFAULT 값이 된다
 
+SELECT * FROM SAMPLE;
 
+INSERT INTO SAMPLE VALUES (4, '정지우', 10);
+
+ROLLBACK;   -- COMMIT 이후의 것(INSERT, UPDATE, DELETE 할 때)들은 다 롤백이 된다
+--ROLLBACK하기 전에 COMMIT을 하지 않으면 다 날라간다
+--SAMPLE 테이블의 DEFAULT 값만 남게 된다
+
+SELECT * FROM SAMPLE;
+
+ALTER TABLE SAMPLE MODIFY AGE NUMBER CHECK (AGE IN(10, 11));    --CHECK는 AGE에는 10과 11만 넣는다는 의미이다
+--제약조건에도 표시된다
+
+INSERT INTO SAMPLE VALUES (4, '정지우', 12);   --에러발생함
+--에러 발생 이유는 AGE에 10, 11만 들어가야 하는데 12가 들어가서 에러 발생
+
+TRUNCATE TABLE EMP;
+
+INSERT INTO EMP (NO, NAME, AGE) VALUES (1, '둘리', 10);
+INSERT INTO EMP (NO, NAME, AGE) VALUES (2, '고길동', 10);
+INSERT INTO EMP (NO, NAME, AGE) VALUES (3, '또치', 10);
+
+CREATE INDEX EMP_IX01 ON EMP(NAME);
+--EMP_IX01의 의미는 인덱스 이름, NAME컬럼에 인덱싱을 거는 것
+CREATE INDEX EMP_IX02 ON EMP(NO, NAME);
+--NO, NAME 컬럼에 인덱싱을 건다(다중선택 가능)
+
+--UNIQUE는 NULL값 허용, 중복 허용X
+CREATE UNIQUE INDEX EMP_IX03 ON EMP(NO);   --에러발생
+--현재 AGE는 10으로 중복값이기 때문에 UNIQUE를 쓸 수 없다
+
+DROP INDEX EMP_IX01;    --INDEX 삭제
+
+select * from student;
+
+create table movie {
+    id number primary key,
+    name varchar2(50) not null,
+    age number
+};
 
 
